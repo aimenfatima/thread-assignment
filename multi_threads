@@ -1,0 +1,41 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include<pthread.h>
+
+int a[10]={1,101,201,301,401,501,601,701,801,901};
+int sum[10]={0};
+int sum_of_threads=0;
+int j=0;
+
+void * sum_of_array(void * arg)
+{
+	int starting_value=(int)arg;
+
+	for(int i=starting_value; i<starting_value+100; i++)
+	{
+		sum [j]+=i;
+	}
+
+	j++;
+return NULL;
+}
+
+int main()
+{
+	pthread_t Threads[10];
+
+	for(int i=0;i<10;i++)
+	{
+		pthread_create(&Threads[i],NULL,sum_of_array,(void *) a[i])
+	}
+
+	for(int i=0;i<10;i++)
+	{
+		pthread_join(Threads[i],NULL);
+		sum_of_threads+=sum[i];
+	}
+	
+printf("Sum of array of 10000 = ");
+printf("%d",sum_of_threads);
+return 0;
+}
